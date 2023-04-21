@@ -1,4 +1,4 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Req, Query } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { Request } from 'express';
 
@@ -10,5 +10,10 @@ export class RoomController {
   async getRoomsByUserId(@Req() req: Request) {
     const user_id = req['user_id'];
     return this.roomService.getRoomsByUserId(user_id);
+  }
+
+  @Get('filtered-users')
+  async getFilteredUsers(@Query('filter') filter: string) {
+    return this.roomService.getFilteredUsers(filter);
   }
 }
