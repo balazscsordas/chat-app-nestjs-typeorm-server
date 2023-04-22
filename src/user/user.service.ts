@@ -5,25 +5,31 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Room } from './room.entity';
-import { Brackets, Repository } from 'typeorm';
 import { User } from 'src/auth/auth.entity';
+import { Message } from 'src/message/message.entity';
+import { Brackets, Repository } from 'typeorm';
 
 @Injectable()
-export class RoomService {
+export class UserService {
   constructor(
-    @InjectRepository(Room) private roomRepository: Repository<Room>,
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async getRoomsByUserId(user_id: number) {
+  async getUsers(user_id: number) {
     try {
-      const rooms = await this.roomRepository
-        .createQueryBuilder('rooms')
-        .leftJoinAndSelect('rooms.users', 'users')
-        .where('user.id = :user_id', { user_id: user_id })
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .distinct(true)
+        .select(['user.id', 'user.first_name', 'user.last_name'])
+        .innerJoin(
+          Message,
+          'message',
+          'message.sender_id = user.id OR message.receiver_id = user.id',
+        )
+        .where('user.id != :user_id', { user_id })
         .getMany();
-      if (!rooms || rooms.length == 0) throw new NotFoundException();
+      if (!users || users.length == 0) throw new NotFoundException();
+      return users;
     } catch (err) {
       console.log(err);
       if (err.status == 404) {
@@ -40,7 +46,7 @@ export class RoomService {
     }
   }
 
-  async getFilteredUsers(filter: string) {
+  async getFilteredUsers(user_id: number, filter: string) {
     try {
       const users = await this.userRepository
         .createQueryBuilder('user')
@@ -56,6 +62,7 @@ export class RoomService {
             }
           }),
         )
+        .andWhere('user.id != :user_id', { user_id })
         .take(20)
         .getMany();
       return users;

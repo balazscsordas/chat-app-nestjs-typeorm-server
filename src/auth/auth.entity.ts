@@ -1,12 +1,5 @@
 import { Message } from 'src/message/message.entity';
-import { Room } from 'src/room/room.entity';
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
@@ -25,9 +18,9 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Message, message => message.user_id)
-  messages: Message[];
+  @OneToMany(() => Message, message => message.sender)
+  sent_messages: Message[];
 
-  @ManyToMany(() => Room, room => room.users)
-  rooms: Room[];
+  @OneToMany(() => Message, message => message.receiver)
+  received_messages: Message[];
 }

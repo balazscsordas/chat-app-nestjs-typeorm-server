@@ -10,15 +10,13 @@ import { MailService } from './services/mail/mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
 import { Token } from './email/token.entity';
-import { RoomController } from './room/room.controller';
-import { RoomService } from './room/room.service';
 import { MessageController } from './message/message.controller';
 import { MessageService } from './message/message.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Room } from './room/room.entity';
 import { Message } from './message/message.entity';
-import { RoomModule } from './room/room.module';
+import { UserModule } from './user/user.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -30,7 +28,7 @@ import { RoomModule } from './room/room.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PW,
       database: process.env.DB,
-      entities: [User, Room, Message, Token],
+      entities: [User, Message, Token],
       ssl: {
         rejectUnauthorized: false,
       },
@@ -52,9 +50,10 @@ import { RoomModule } from './room/room.module';
     }),
     AuthModule,
     EmailModule,
-    RoomModule,
+    UserModule,
+    MessageModule,
   ],
-  controllers: [AppController, MessageController],
+  controllers: [AppController],
   providers: [
     AppService,
     JwtService,
@@ -63,7 +62,6 @@ import { RoomModule } from './room/room.module';
       useClass: AuthGuard,
     },
     MailService,
-    MessageService,
   ],
 })
 export class AppModule {}

@@ -1,5 +1,4 @@
 import { User } from 'src/auth/auth.entity';
-import { Room } from 'src/room/room.entity';
 import {
   Column,
   Entity,
@@ -14,16 +13,19 @@ export class Message {
   id: number;
 
   @Column()
-  room_id: number;
+  message: string;
 
   @Column()
-  user_id: number;
+  sender_id: number;
 
-  @ManyToOne(() => User, user => user.messages)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @Column()
+  receiver_id: number;
 
-  @ManyToOne(() => Room, room => room.messages)
-  @JoinColumn({ name: 'room_id' })
-  room: Room;
+  @ManyToOne(() => User, user => user.sent_messages)
+  @JoinColumn({ name: 'sender_id' })
+  sender: User;
+
+  @ManyToOne(() => User, user => user.received_messages)
+  @JoinColumn({ name: 'receiver_id' })
+  receiver: User;
 }
