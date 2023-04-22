@@ -26,7 +26,11 @@ export class UserService {
           'message',
           'message.sender_id = user.id OR message.receiver_id = user.id',
         )
-        .where('user.id != :user_id', { user_id })
+        .where(
+          '(message.sender_id = :user_id OR message.receiver_id = :user_id)',
+          { user_id },
+        )
+        .andWhere('user.id != :user_id', { user_id })
         .getMany();
       if (!users || users.length == 0) throw new NotFoundException();
       return users;
