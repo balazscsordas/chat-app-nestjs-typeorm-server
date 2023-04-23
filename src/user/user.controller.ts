@@ -1,8 +1,10 @@
 import { Controller, Get, Query, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiTags('Users')
 export class UserController {
   constructor(private userService: UserService) {}
 

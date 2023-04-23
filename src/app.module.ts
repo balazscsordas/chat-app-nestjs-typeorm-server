@@ -10,10 +10,6 @@ import { MailService } from './services/mail/mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
 import { Token } from './email/token.entity';
-import { MessageController } from './message/message.controller';
-import { MessageService } from './message/message.service';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { Message } from './message/message.entity';
 import { UserModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
@@ -53,9 +49,8 @@ import { MessageModule } from './message/message.module';
     UserModule,
     MessageModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     JwtService,
     {
       provide: APP_GUARD,

@@ -1,8 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { PublicRoute } from 'src/decorators/public-route.decorator';
 import { EmailService } from './email.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('email')
+@ApiTags('Emails')
 export class EmailController {
   constructor(private emailService: EmailService) {}
 
